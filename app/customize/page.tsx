@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+/*import { useState, useMemo } from "react";
 import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -316,3 +316,4 @@ export default function CustomizePage() {
     </main>
   );
 }
+*/

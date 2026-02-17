@@ -1,119 +1,134 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const products = [
   {
     id: 1,
-    name: "Classic World Map",
-    price: 299,
-    rating: 4.9,
-    reviews: 128,
-    image: "/images/product-1.jpg",
+    name: "Rustic Wood World Map",
+    price: 2000,
+    rating: 5,
+    reviews: 100,
+    image: "/BS1.jpeg",
     badge: "Best Seller",
   },
   {
     id: 2,
-    name: "LED Europe Map",
-    price: 349,
-    rating: 4.8,
-    reviews: 89,
-    image: "/images/product-2.jpg",
-    badge: "New",
-  },
-  {
-    id: 3,
-    name: "Minimalist Japan Map",
-    price: 199,
-    rating: 4.9,
-    reviews: 67,
-    image: "/images/product-3.jpg",
+    name: "Light Oak World Map",
+    price: 2000,
+    rating: 5,
+    reviews: 100,
+    image: "/BS2.jpeg",
     badge: null,
   },
   {
-    id: 4,
-    name: "USA States Map",
-    price: 279,
-    rating: 4.7,
-    reviews: 156,
-    image: "/images/product-4.jpg",
+    id: 3,
+    name: "Multi-Tone India Map",
+    price: 2000,
+    rating: 5,
+    reviews: 100,
+    image: "/BS3.jpeg",
     badge: "Popular",
+  },
+  {
+    id: 4,
+    name: "LED Europe Map",
+    price: 2000,
+    rating: 5,
+    reviews: 100,
+    image: "/BS4.jpeg",
+    badge: "Latest",
   },
 ];
 
 export function BestSellers() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
+    <section className="py-28 px-6 lg:px-8 bg-[#f5f3ef]">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12">
-          <div>
-            <p className="text-accent text-sm uppercase tracking-[0.2em] mb-3 font-medium">
-              Shop
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-foreground text-balance">
-              Best Sellers
+        {/* Header */}
+        <div className="mb-16">
+          <p className="text-sm tracking-[0.35em] uppercase text-[#7a5c43] mb-3">
+            Shop
+          </p>
+
+          <div className="flex items-end justify-between">
+            <h2 className="font-serif text-4xl md:text-5xl text-[#3e2d21]">
+              Best Seller
             </h2>
+
+            <Link
+              href="/shop"
+              className="text-[#7a5c43] font-medium hover:opacity-70 transition"
+            >
+              View All →
+            </Link>
           </div>
-          <Link
-            href="/shop"
-            className="mt-4 sm:mt-0 text-accent hover:text-accent/80 font-medium flex items-center gap-2 transition-colors"
-          >
-            View All Products
-            <span>&rarr;</span>
-          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Products */}
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
             <Link
               key={product.id}
               href={`/product/${product.id}`}
-              className="group"
+              className="group block"
             >
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-muted mb-4">
+              {/* Image */}
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#ebe7e1]">
                 <Image
-                  src={product.image || "/placeholder.svg"}
+                  src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+
+                {/* Badge */}
                 {product.badge && (
-                  <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-3 py-1 rounded-full">
+                  <span
+                    className="
+                    absolute top-3 left-3
+                    text-xs
+                    bg-[#6b4f3a]
+                    text-white
+                    px-3 py-1
+                    rounded-full
+                    shadow-sm
+                  "
+                  >
                     {product.badge}
                   </span>
                 )}
               </div>
-              <div>
-                <div className="flex items-center gap-1 mb-2">
-                  <Star className="w-4 h-4 fill-accent text-accent" />
-                  <span className="text-sm font-medium text-foreground">
-                    {product.rating}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
+
+              {/* Info */}
+              <div className="mt-4">
+                {/* Stars */}
+                <div className="flex items-center gap-1 mb-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-[#f4b740] text-[#f4b740]"
+                    />
+                  ))}
+
+                  <span className="text-sm text-[#6b5a4d] ml-1">
                     ({product.reviews})
                   </span>
                 </div>
-                <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">
+
+                {/* Name */}
+                <h3 className="text-[#3e2d21] font-medium group-hover:opacity-70 transition">
                   {product.name}
                 </h3>
-                <p className="text-lg font-semibold text-foreground mt-1">
-                  ${product.price}
+
+                {/* Price */}
+                <p className="mt-1 font-semibold text-[#3e2d21]">
+                  ₹ {product.price}
                 </p>
               </div>
             </Link>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="px-8 bg-transparent"
-          >
-            <Link href="/shop">Browse All Maps</Link>
-          </Button>
         </div>
       </div>
     </section>

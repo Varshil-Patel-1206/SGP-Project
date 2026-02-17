@@ -1,152 +1,151 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const reviews = [
   {
     id: 1,
+    name: "John Doe",
+    location: "Gujarat, India",
+    rating: 5,
+    text: "As an interior designer, I've recommended WoodMaps to countless clients. The quality is consistent, the designs are elegant, and the sustainable sourcing aligns with my values.",
+    product: "Multi-Tone India Map",
+    avatar: "JD",
+  },
+  {
+    id: 2,
     name: "Sarah Mitchell",
     location: "New York, USA",
     rating: 5,
-    text: "The craftsmanship is absolutely stunning. Our world map became the centerpiece of our living room. The attention to detail in the wood grain and the precision of the laser cutting is remarkable.",
+    text: "The craftsmanship is stunning. Our world map became the centerpiece of our living room.",
     product: "Classic World Map",
     avatar: "SM",
   },
   {
-    id: 2,
+    id: 3,
     name: "James Thornton",
     location: "London, UK",
     rating: 5,
-    text: "I ordered a custom UK map with our family's travel pins marked. The team was incredibly responsive and the final product exceeded all expectations. Truly a work of art.",
+    text: "The final product exceeded expectations — truly a piece of art.",
     product: "Custom UK Map",
     avatar: "JT",
-  },
-  {
-    id: 3,
-    name: "Emma Rodriguez",
-    location: "Barcelona, Spain",
-    rating: 5,
-    text: "As an interior designer, I've recommended WoodMaps to countless clients. The quality is consistent, the designs are elegant, and the sustainable sourcing aligns with my values.",
-    product: "LED Europe Map",
-    avatar: "ER",
-  },
-  {
-    id: 4,
-    name: "Michael Chen",
-    location: "Toronto, Canada",
-    rating: 5,
-    text: "The LED-backlit world map transforms our office space. During the day it's a beautiful wooden piece, and at night the warm glow creates an incredible atmosphere.",
-    product: "LED World Map XL",
-    avatar: "MC",
   },
 ];
 
 export function CustomerReviews() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextReview = () => {
+  const nextReview = () =>
     setCurrentIndex((prev) => (prev + 1) % reviews.length);
-  };
 
-  const prevReview = () => {
+  const prevReview = () =>
     setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
-  };
+
+  const review = reviews[currentIndex] ?? reviews[0];
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-secondary">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-accent text-sm uppercase tracking-[0.2em] mb-3 font-medium">
-            Testimonials
+    <section className="py-32 px-6 lg:px-8 bg-[#e9e2d9]">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <p className="uppercase tracking-[0.35em] text-xs text-[#7a5c43] mb-4">
+            Reviews
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-foreground mb-4 text-balance">
+
+          <h2 className="font-serif text-4xl md:text-5xl text-[#4b372a]">
             What Our Customers Say
           </h2>
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          <div className="bg-card rounded-2xl p-8 md:p-12 border border-border">
-            <Quote className="w-12 h-12 text-accent/20 mb-6" />
-            
-            <div className="min-h-[200px]">
-              <p className="text-lg md:text-xl text-foreground leading-relaxed mb-8 text-pretty">
-                {reviews[currentIndex].text}
-              </p>
+        {/* Testimonial Card */}
+        <div className="relative bg-[#f4efe9] rounded-3xl p-10 md:p-14">
+          {/* Big Quote */}
+          <Quote className="w-14 h-14 text-[#7a5c43]/40 mb-6" />
 
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold text-lg">
-                  {reviews[currentIndex].avatar}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="font-semibold text-foreground">
-                      {reviews[currentIndex].name}
-                    </p>
-                    <div className="flex">
-                      {Array.from({ length: reviews[currentIndex].rating }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-accent text-accent" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {reviews[currentIndex].location} &middot; {reviews[currentIndex].product}
-                  </p>
+          {/* Text */}
+          <p
+            className="
+  text-lg md:text-xl
+  leading-relaxed
+  text-[#4b372a]
+  max-w-3xl
+  mb-10
+  min-h-[140px]
+  line-clamp-4
+"
+          >
+            {review.text}
+          </p>
+
+          {/* User */}
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-[#7a5c43] text-white flex items-center justify-center font-semibold">
+              {review.avatar}
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="font-semibold text-[#4b372a]">{review.name}</p>
+
+                <div className="flex">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-[#c28b48] text-[#c28b48]"
+                    />
+                  ))}
                 </div>
               </div>
+
+              <p className="text-sm text-[#6b5a4d]">
+                {review.location} · {review.product}
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <Button
-              variant="outline"
-              size="icon"
+          {/* Slider Controls */}
+          <div className="flex items-center justify-center gap-6 mt-10">
+            <button
               onClick={prevReview}
-              className="rounded-full bg-transparent"
+              className="w-9 h-9 rounded-full border border-[#7a5c43]/40 flex items-center justify-center hover:bg-[#7a5c43]/10 transition"
             >
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
+              <ChevronLeft className="w-4 h-4 text-[#4b372a]" />
+            </button>
+
             <div className="flex gap-2">
-              {reviews.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentIndex ? "bg-accent" : "bg-border"
+              {reviews.map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    i === currentIndex ? "bg-[#7a5c43]" : "bg-[#7a5c43]/30"
                   }`}
                 />
               ))}
             </div>
-            <Button
-              variant="outline"
-              size="icon"
+
+            <button
               onClick={nextReview}
-              className="rounded-full bg-transparent"
+              className="w-9 h-9 rounded-full border border-[#7a5c43]/40 flex items-center justify-center hover:bg-[#7a5c43]/10 transition"
             >
-              <ChevronRight className="w-5 h-5" />
-            </Button>
+              <ChevronRight className="w-4 h-4 text-[#4b372a]" />
+            </button>
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <p className="font-serif text-4xl font-medium text-foreground mb-2">10K+</p>
-            <p className="text-muted-foreground text-sm">Happy Customers</p>
-          </div>
-          <div>
-            <p className="font-serif text-4xl font-medium text-foreground mb-2">50+</p>
-            <p className="text-muted-foreground text-sm">Countries Shipped</p>
-          </div>
-          <div>
-            <p className="font-serif text-4xl font-medium text-foreground mb-2">4.9</p>
-            <p className="text-muted-foreground text-sm">Average Rating</p>
-          </div>
-          <div>
-            <p className="font-serif text-4xl font-medium text-foreground mb-2">8 Years</p>
-            <p className="text-muted-foreground text-sm">In Business</p>
-          </div>
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center mt-20">
+          {[
+            ["10K+", "Happy Customers"],
+            ["120+", "Products"],
+            ["4.9", "Average Ratings"],
+            ["8", "Years In Business"],
+          ].map(([num, label]) => (
+            <div key={label}>
+              <p className="font-serif text-4xl text-[#4b372a] mb-2">{num}</p>
+              <p className="text-[#6b5a4d] text-sm">{label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

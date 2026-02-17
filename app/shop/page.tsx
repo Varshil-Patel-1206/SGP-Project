@@ -1,28 +1,32 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import { Star, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 
+// TODO: Replace with real product images from database
+// TODO: Add proper product descriptions
+// TODO: Connect to inventory system
+// TODO: Add product variants (wood type, finish, LED options)
 const allProducts = [
-  { id: 1, name: "Classic World Map", price: 299, rating: 4.9, reviews: 128, image: "/images/product-1.jpg", size: "large", region: "world", badge: "Best Seller" },
-  { id: 2, name: "LED Europe Map", price: 349, rating: 4.8, reviews: 89, image: "/images/product-2.jpg", size: "medium", region: "country", badge: "New" },
-  { id: 3, name: "Minimalist Japan Map", price: 199, rating: 4.9, reviews: 67, image: "/images/product-3.jpg", size: "medium", region: "country", badge: null },
-  { id: 4, name: "USA States Map", price: 279, rating: 4.7, reviews: 156, image: "/images/product-4.jpg", size: "large", region: "country", badge: "Popular" },
-  { id: 5, name: "World Map XL", price: 449, rating: 4.9, reviews: 203, image: "/images/world-map.jpg", size: "xl", region: "world", badge: null },
-  { id: 6, name: "NYC City Map", price: 189, rating: 4.8, reviews: 94, image: "/images/city-map.jpg", size: "small", region: "city", badge: null },
-  { id: 7, name: "Paris Streets Map", price: 189, rating: 4.7, reviews: 78, image: "/images/city-map.jpg", size: "small", region: "city", badge: null },
-  { id: 8, name: "London City Map", price: 199, rating: 4.8, reviews: 112, image: "/images/city-map.jpg", size: "medium", region: "city", badge: "New" },
-  { id: 9, name: "Australia Map", price: 259, rating: 4.6, reviews: 45, image: "/images/country-map.jpg", size: "large", region: "country", badge: null },
-  { id: 10, name: "Canada Map", price: 269, rating: 4.7, reviews: 67, image: "/images/country-map.jpg", size: "large", region: "country", badge: null },
-  { id: 11, name: "World Map LED", price: 499, rating: 4.9, reviews: 178, image: "/images/product-1.jpg", size: "xl", region: "world", badge: "Premium" },
-  { id: 12, name: "Tokyo City Map", price: 179, rating: 4.8, reviews: 89, image: "/images/city-map.jpg", size: "small", region: "city", badge: null },
+  { id: 1, name: "Classic World Map", price: 299, rating: 4.9, reviews: 128, image: "/World.jpeg", size: "large", region: "world", badge: "Best Seller" },
+  { id: 2, name: "LED Europe Map", price: 349, rating: 4.8, reviews: 89, image: "/Country.jpeg", size: "medium", region: "country", badge: "New" },
+  { id: 3, name: "Minimalist Japan Map", price: 199, rating: 4.9, reviews: 67, image: "/Custom.jpeg", size: "medium", region: "country", badge: null },
+  { id: 4, name: "USA States Map", price: 279, rating: 4.7, reviews: 156, image: "/Home.jpeg", size: "large", region: "country", badge: "Popular" },
+  { id: 5, name: "World Map XL", price: 449, rating: 4.9, reviews: 203, image: "/World.jpeg", size: "xl", region: "world", badge: null },
+  { id: 6, name: "NYC City Map", price: 189, rating: 4.8, reviews: 94, image: "/BS1.jpeg", size: "small", region: "city", badge: null },
+  { id: 7, name: "Paris Streets Map", price: 189, rating: 4.7, reviews: 78, image: "/BS2.jpeg", size: "small", region: "city", badge: null },
+  { id: 8, name: "London City Map", price: 199, rating: 4.8, reviews: 112, image: "/BS3.jpeg", size: "medium", region: "city", badge: "New" },
+  { id: 9, name: "Australia Map", price: 259, rating: 4.6, reviews: 45, image: "/BS4.jpeg", size: "large", region: "country", badge: null },
+  { id: 10, name: "Canada Map", price: 269, rating: 4.7, reviews: 67, image: "/Country.jpeg", size: "large", region: "country", badge: null },
+  { id: 11, name: "World Map LED", price: 499, rating: 4.9, reviews: 178, image: "/World.jpeg", size: "xl", region: "world", badge: "Premium" },
+  { id: 12, name: "Tokyo City Map", price: 179, rating: 4.8, reviews: 89, image: "/Custom.jpeg", size: "small", region: "city", badge: null },
 ];
 
 const sizeFilters = [
@@ -44,8 +48,20 @@ export default function ShopPage() {
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
+  const [tempMinPrice, setTempMinPrice] = useState(0);
+  const [tempMaxPrice, setTempMaxPrice] = useState(500);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Debounce price range updates
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPriceRange([tempMinPrice, tempMaxPrice]);
+      setCurrentPage(1);
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [tempMinPrice, tempMaxPrice]);
 
   const filteredProducts = useMemo(() => {
     return allProducts.filter((product) => {
@@ -80,6 +96,8 @@ export default function ShopPage() {
     setSelectedSizes([]);
     setSelectedRegions([]);
     setPriceRange([0, 500]);
+    setTempMinPrice(0);
+    setTempMaxPrice(500);
     setCurrentPage(1);
   };
 
@@ -117,20 +135,41 @@ export default function ShopPage() {
 
       <div>
         <h3 className="font-semibold text-foreground mb-4">Price Range</h3>
-        <Slider
-          value={priceRange}
-          onValueChange={(value) => {
-            setPriceRange(value);
-            setCurrentPage(1);
-          }}
-          min={0}
-          max={500}
-          step={10}
-          className="mb-4"
-        />
-        <div className="flex justify-between text-sm text-muted-foreground">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">Minimum Price</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <Input
+                type="number"
+                min={0}
+                value={tempMinPrice}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  setTempMinPrice(value);
+                }}
+                className="pl-7"
+                placeholder="0"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">Maximum Price</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <Input
+                type="number"
+                min={0}
+                value={tempMaxPrice}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  setTempMaxPrice(value);
+                }}
+                className="pl-7"
+                placeholder="No limit"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -182,9 +221,13 @@ export default function ShopPage() {
             </aside>
 
             <div className="flex-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-300">
                 {paginatedProducts.map((product) => (
-                  <Link key={product.id} href={`/product/${product.id}`} className="group">
+                  <Link 
+                    key={product.id} 
+                    href={`/product/${product.id}`} 
+                    className="group animate-in fade-in duration-300"
+                  >
                     <div className="relative aspect-square overflow-hidden rounded-lg bg-muted mb-4">
                       <Image
                         src={product.image || "/placeholder.svg"}

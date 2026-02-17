@@ -1,81 +1,102 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, ArrowRight, Search } from "lucide-react";
+import { Calendar, Clock, Search } from "lucide-react";
 
 const blogPosts = [
   {
     id: 1,
-    title: "How to Choose the Perfect Wooden Map for Your Space",
+    title: "The Art of Wooden Map Making",
     excerpt:
-      "Discover the key factors to consider when selecting a wooden map that complements your interior design and personal style.",
-    image: "/images/blog-1.jpg",
-    category: "Interior Design",
-    date: "January 15, 2026",
+      "Discover the intricate process behind creating our handcrafted wooden maps.",
+    image: "/Home.jpeg",
+    category: "Craftsmanship",
+    date: "February 15, 2024",
     readTime: "5 min read",
-    featured: true,
+    author: "Admin",
   },
   {
     id: 2,
-    title: "The Art of Wood Finishing: Behind Our Craftsmanship",
+    title: "Choosing the Perfect Wood for Your Map",
     excerpt:
-      "Take a peek behind the scenes at our workshop and learn about the traditional techniques we use to create lasting beauty.",
-    image: "/images/blog-2.jpg",
-    category: "Craftsmanship",
-    date: "January 10, 2026",
+      "Learn about different wood types and how they affect the final product.",
+    image: "/Custom.jpeg",
+    category: "Materials",
+    date: "February 10, 2024",
     readTime: "7 min read",
-    featured: true,
+    author: "Admin",
   },
   {
     id: 3,
-    title: "Sustainable Wood Sourcing: Our Commitment to the Planet",
+    title: "How to Choose the Perfect Wooden Map for Your Space",
     excerpt:
-      "Learn about our partnerships with certified sustainable forests and our zero-waste manufacturing process.",
-    image: "/images/blog-3.jpg",
-    category: "Sustainability",
-    date: "January 5, 2026",
-    readTime: "4 min read",
-    featured: false,
+      "Discover the key factors to consider when selecting a wooden map that complements your interior design and personal style.",
+    image: "/World.jpeg",
+    category: "Interior Design",
+    date: "January 15, 2024",
+    readTime: "5 min read",
+    author: "Admin",
   },
   {
     id: 4,
-    title: "5 Creative Ways to Display Your Wooden Map",
+    title: "The Art of Wood Finishing: Behind Our Craftsmanship",
     excerpt:
-      "From accent lighting to gallery walls, explore innovative ideas to showcase your wooden map as a stunning centerpiece.",
-    image: "/images/world-map.jpg",
-    category: "Interior Design",
-    date: "December 28, 2025",
-    readTime: "6 min read",
-    featured: false,
+      "Take a peek behind the scenes at our workshop and learn about the traditional techniques we use to create lasting beauty.",
+    image: "/Country.jpeg",
+    category: "Craftsmanship",
+    date: "January 10, 2024",
+    readTime: "7 min read",
+    author: "Admin",
   },
   {
     id: 5,
-    title: "The History of Cartography in Wood Art",
+    title: "Sustainable Wood Sourcing: Our Commitment to the Planet",
     excerpt:
-      "Journey through centuries of map-making and discover how wooden maps became a cherished form of wall art.",
-    image: "/images/country-map.jpg",
-    category: "History",
-    date: "December 20, 2025",
-    readTime: "8 min read",
-    featured: false,
+      "Learn about our partnerships with certified sustainable forests and our zero-waste manufacturing process.",
+    image: "/BS1.jpeg",
+    category: "Sustainability",
+    date: "January 5, 2024",
+    readTime: "4 min read",
+    author: "Admin",
   },
   {
     id: 6,
+    title: "5 Creative Ways to Display Your Wooden Map",
+    excerpt:
+      "From accent lighting to gallery walls, explore innovative ideas to showcase your wooden map as a stunning centerpiece.",
+    image: "/BS2.jpeg",
+    category: "Interior Design",
+    date: "December 28, 2023",
+    readTime: "6 min read",
+    author: "Admin",
+  },
+  {
+    id: 7,
+    title: "The History of Cartography in Wood Art",
+    excerpt:
+      "Journey through centuries of map-making and discover how wooden maps became a cherished form of wall art.",
+    image: "/BS3.jpeg",
+    category: "History",
+    date: "December 20, 2023",
+    readTime: "8 min read",
+    author: "Admin",
+  },
+  {
+    id: 8,
     title: "Gift Guide: Wooden Maps for Every Occasion",
     excerpt:
       "Whether it's a wedding, housewarming, or anniversary, find the perfect wooden map gift for your loved ones.",
-    image: "/images/city-map.jpg",
+    image: "/BS4.jpeg",
     category: "Gift Ideas",
-    date: "December 15, 2025",
+    date: "December 15, 2023",
     readTime: "5 min read",
-    featured: false,
+    author: "Admin",
   },
 ];
 
@@ -86,11 +107,13 @@ const categories = [
   "Sustainability",
   "History",
   "Gift Ideas",
+  "Materials",
 ];
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesCategory =
@@ -101,21 +124,22 @@ export default function BlogPage() {
     return matchesCategory && matchesSearch;
   });
 
-  const featuredPosts = blogPosts.filter((post) => post.featured);
+  // Show only 5 most recent posts unless "View More" is clicked
+  const displayedPosts = showAll ? filteredPosts : filteredPosts.slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#fffaf3]">
       <Header />
 
       <main>
         {/* Hero Section */}
-        <section className="bg-secondary/50 py-16 md:py-24">
+        <section className="bg-gradient-to-br from-[#f7f1e8] to-[#efe6d8] py-16 md:py-24 border-b border-[#e6dcd0]">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-3xl text-center">
-              <h1 className="font-serif text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl text-balance">
+              <h1 className="font-serif text-4xl font-bold tracking-tight text-[#2b1a12] md:text-5xl lg:text-6xl">
                 Stories & Inspiration
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground text-pretty">
+              <p className="mt-6 text-lg text-[#5a3726]">
                 Discover the artistry behind our wooden maps, interior design
                 tips, and stories of craftsmanship that inspire.
               </p>
@@ -123,75 +147,21 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Featured Posts */}
+        {/* All Posts */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-              Featured Stories
-            </h2>
-            <div className="mt-8 grid gap-8 md:grid-cols-2">
-              {featuredPosts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.id}`}
-                  className="group overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-lg"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
-                      src={post.image || "/placeholder.svg"}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute left-4 top-4">
-                      <Badge className="bg-primary text-primary-foreground">
-                        {post.category}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        {post.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        {post.readTime}
-                      </span>
-                    </div>
-                    <h3 className="mt-3 font-serif text-xl font-semibold text-foreground group-hover:text-primary transition-colors text-balance">
-                      {post.title}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary">
-                      Read More
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* All Posts */}
-        <section className="border-t border-border bg-secondary/30 py-16">
-          <div className="container mx-auto px-4">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-                All Articles
+              <h2 className="font-serif text-2xl font-bold text-[#2b1a12] md:text-3xl">
+                Recent Articles
               </h2>
               <div className="relative w-full md:w-80">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9b7b65]" />
                 <Input
                   type="text"
                   placeholder="Search articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white border-[#d4b896] focus:border-[#8b5a3c]"
                 />
               </div>
             </div>
@@ -204,7 +174,11 @@ export default function BlogPage() {
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
-                  className="rounded-full"
+                  className={`rounded-full ${
+                    selectedCategory === category
+                      ? "bg-[#8b5a3c] hover:bg-[#6d4830] text-white"
+                      : "border-[#d4b896] text-[#5a3726] hover:bg-[#f7f1e8]"
+                  }`}
                 >
                   {category}
                 </Button>
@@ -213,13 +187,12 @@ export default function BlogPage() {
 
             {/* Posts Grid */}
             <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredPosts.map((post) => (
-                <Link
+              {displayedPosts.map((post) => (
+                <div
                   key={post.id}
-                  href={`/blog/${post.id}`}
-                  className="group overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-lg"
+                  className="group overflow-hidden rounded-lg border border-[#e6dcd0] bg-white transition-shadow hover:shadow-lg"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#efe6d8]">
                     <Image
                       src={post.image || "/placeholder.svg"}
                       alt={post.title}
@@ -229,45 +202,64 @@ export default function BlogPage() {
                   </div>
                   <div className="p-5">
                     <div className="flex items-center justify-between">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge className="text-xs bg-[#9b7b65] text-white hover:bg-[#8b5a3c]">
                         {post.category}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-[#9b7b65]">
                         {post.readTime}
                       </span>
                     </div>
-                    <h3 className="mt-3 font-serif text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                    <h3 className="mt-3 font-serif text-lg font-semibold text-[#2b1a12] group-hover:text-[#8b5a3c] transition-colors line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                    <p className="mt-2 text-sm text-[#5a3726] line-clamp-2">
                       {post.excerpt}
                     </p>
-                    <p className="mt-3 text-xs text-muted-foreground">
-                      {post.date}
-                    </p>
+                    <div className="mt-3 flex items-center gap-4 text-xs text-[#9b7b65]">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {post.date}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {post.author}
+                      </span>
+                    </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
 
             {filteredPosts.length === 0 && (
               <div className="mt-10 text-center">
-                <p className="text-muted-foreground">
+                <p className="text-[#5a3726]">
                   No articles found matching your criteria.
                 </p>
+              </div>
+            )}
+
+            {/* View More / Show Less Button */}
+            {filteredPosts.length > 5 && (
+              <div className="mt-10 text-center">
+                <Button
+                  onClick={() => setShowAll(!showAll)}
+                  className="bg-[#8b5a3c] hover:bg-[#6d4830] text-white px-8"
+                >
+                  {showAll ? "Show Less" : "View More"}
+                </Button>
               </div>
             )}
           </div>
         </section>
 
         {/* Newsletter CTA */}
-        <section className="bg-primary py-16">
+        <section className="bg-gradient-to-br from-[#8b5a3c] to-[#6d4830] py-16 border-t border-[#d4b896]">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-serif text-2xl font-bold text-primary-foreground md:text-3xl">
+              <h2 className="font-serif text-2xl font-bold text-white md:text-3xl">
                 Stay Inspired
               </h2>
-              <p className="mt-4 text-primary-foreground/80">
+              <p className="mt-4 text-white/90">
                 Subscribe to our newsletter for the latest articles, design
                 tips, and exclusive offers.
               </p>
@@ -275,11 +267,10 @@ export default function BlogPage() {
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 sm:w-80"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 sm:w-80"
                 />
                 <Button
-                  variant="secondary"
-                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+                  className="bg-white text-[#8b5a3c] hover:bg-[#f7f1e8]"
                 >
                   Subscribe
                 </Button>

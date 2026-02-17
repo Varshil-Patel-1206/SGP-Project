@@ -9,12 +9,38 @@ import { Footer } from "@/components/footer";
 export default function Home() {
   return (
     <>
+      {/* Site Header */}
       <Header />
-      <HeroSection />
-      <FeaturedCollections />
-      <WhyChooseUs />
-      <BestSellers />
-      <CustomerReviews />
+
+      {/* Main Content */}
+      <main className="min-h-screen overflow-x-hidden">
+        {/* HERO */}
+        <section aria-label="Hero">
+          <HeroSection />
+        </section>
+
+        {/* COLLECTIONS */}
+        <section aria-label="Featured Collections">
+          <FeaturedCollections />
+        </section>
+
+        {/* WHY CHOOSE US */}
+        <section aria-label="Why Choose WoodMaps">
+          <WhyChooseUs />
+        </section>
+
+        {/* BEST SELLERS */}
+        <section aria-label="Best Selling Products">
+          <BestSellers />
+        </section>
+
+        {/* REVIEWS */}
+        <section aria-label="Customer Reviews">
+          <CustomerReviews />
+        </section>
+      </main>
+
+      {/* Footer */}
       <Footer />
     </>
   );
