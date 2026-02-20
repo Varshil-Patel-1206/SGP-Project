@@ -1,4 +1,11 @@
-/*"use client";
+"use client";
+
+// TODO: Integrate with payment gateway (Stripe/PayPal)
+// TODO: Add order confirmation emails
+// TODO: Connect to backend API for order processing
+// TODO: Add order tracking functionality
+// TODO: Implement shipping calculator based on location
+// TODO: Add discount code functionality
 
 import React from "react"
 
@@ -13,40 +20,10 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent } from "@/components/ui/card";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, CreditCard, Check, Truck } from "lucide-react";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  size: string;
-  color: string;
-}
-
-const initialCartItems: CartItem[] = [
-  {
-    id: 1,
-    name: "Classic World Map",
-    price: 349,
-    quantity: 1,
-    image: "/images/product-1.jpg",
-    size: "Medium (60 x 40 cm)",
-    color: "Natural Oak",
-  },
-  {
-    id: 2,
-    name: "NYC City Map",
-    price: 189,
-    quantity: 2,
-    image: "/images/city-map.jpg",
-    size: "Small (30 x 20 cm)",
-    color: "Dark Walnut",
-  },
-];
+import { useCart } from "@/lib/cart-context";
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  const { cartItems, updateQuantity, removeFromCart, clearCart, cartCount } = useCart();
   const [step, setStep] = useState<"cart" | "shipping" | "payment" | "confirmation">("cart");
   const [shippingInfo, setShippingInfo] = useState({
     firstName: "",
@@ -65,18 +42,11 @@ export default function CartPage() {
   const shippingCost = shippingMethod === "express" ? 25 : subtotal > 200 ? 0 : 15;
   const total = subtotal + shippingCost;
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems((items) =>
-      items
-        .map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(0, item.quantity + delta) } : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
+  const handleUpdateQuantity = (id: number, delta: number) => {
+    const item = cartItems.find((i) => i.id === id);
+    if (item) {
+      updateQuantity(id, item.quantity + delta);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,7 +160,7 @@ export default function CartPage() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  onClick={() => removeItem(item.id)}
+                                  onClick={() => removeFromCart(item.id)}
                                   className="text-muted-foreground hover:text-destructive"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -202,7 +172,7 @@ export default function CartPage() {
                                     variant="outline"
                                     size="icon"
                                     className="h-8 w-8 bg-transparent"
-                                    onClick={() => updateQuantity(item.id, -1)}
+                                    onClick={() => handleUpdateQuantity(item.id, -1)}
                                   >
                                     <Minus className="w-3 h-3" />
                                   </Button>
@@ -211,7 +181,7 @@ export default function CartPage() {
                                     variant="outline"
                                     size="icon"
                                     className="h-8 w-8 bg-transparent"
-                                    onClick={() => updateQuantity(item.id, 1)}
+                                    onClick={() => handleUpdateQuantity(item.id, 1)}
                                   >
                                     <Plus className="w-3 h-3" />
                                   </Button>
@@ -478,4 +448,3 @@ export default function CartPage() {
     </main>
   );
 }
-*/

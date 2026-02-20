@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ShoppingCart, Menu, X, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/lib/cart-context";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -143,17 +145,21 @@ export function Header() {
 
             <Link href="/cart" className="relative text-[#3b2412]">
               <ShoppingCart className="h-5 w-5" />
-              <span
-                className="
-                absolute -top-2 -right-2
-                h-4 w-4 rounded-full
-                bg-[#9b7b65]
-                text-white
-                text-xs flex items-center justify-center
-              "
-              >
-                0
-              </span>
+              {cartCount > 0 && (
+                <span
+                  className="
+                    absolute -top-2 -right-2
+                    h-5 w-5 rounded-full
+                    bg-[#8b5a3c]
+                    text-white
+                    text-xs flex items-center justify-center
+                    font-medium
+                    animate-in zoom-in duration-200
+                  "
+                >
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
             {/* MOBILE BUTTON */}

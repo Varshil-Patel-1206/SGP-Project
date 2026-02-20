@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/lib/cart-context";
 
 /* Body Font */
 const geistSans = Geist({
@@ -42,7 +43,9 @@ export default function RootLayout({
           antialiased
         `}
       >
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
