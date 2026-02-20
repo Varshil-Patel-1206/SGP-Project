@@ -277,10 +277,6 @@ export default function ShopPage() {
                       Add to Cart
                     </Button>
                   </div>
-                    <Button variant="outline" className="w-full mt-3 bg-transparent" size="sm">
-                      View Details
-                    </Button>
-                  </div>
                 ))}
               </div>
 
