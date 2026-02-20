@@ -53,6 +53,7 @@ export default function ShopPage() {
   const [tempMaxPrice, setTempMaxPrice] = useState(999999);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<string>("featured");
   const { addToCart } = useCart();
 
   // Debounce price range updates
@@ -66,13 +67,41 @@ export default function ShopPage() {
   }, [tempMinPrice, tempMaxPrice]);
 
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((product) => {
+    let products = allProducts.filter((product) => {
       const matchesSize = selectedSizes.length === 0 || selectedSizes.includes(product.size);
       const matchesRegion = selectedRegions.length === 0 || selectedRegions.includes(product.region);
       const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
       return matchesSize && matchesRegion && matchesPrice;
     });
-  }, [selectedSizes, selectedRegions, priceRange]);
+
+    // Apply sorting
+    switch (sortBy) {
+      case "price-low-high":
+        products.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high-low":
+        products.sort((a, b) => b.price - a.price);
+        break;
+      case "rating-high-low":
+        products.sort((a, b) => b.rating - a.rating);
+        break;
+      case "rating-low-high":
+        products.sort((a, b) => a.rating - b.rating);
+        break;
+      case "name-a-z":
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-z-a":
+        products.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "featured":
+      default:
+        // Keep original order (featured products first)
+        break;
+    }
+
+    return products;
+  }, [selectedSizes, selectedRegions, priceRange, sortBy]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
@@ -238,18 +267,36 @@ export default function ShopPage() {
 
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <p className="text-muted-foreground">
               Showing {paginatedProducts.length} of {filteredProducts.length} products
             </p>
-            <Button
-              variant="outline"
-              className="lg:hidden bg-transparent"
-              onClick={() => setMobileFiltersOpen(true)}
-            >
-              <SlidersHorizontal className="w-4 h-4 mr-2" />
-              Filters
-            </Button>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                <label className="text-sm text-muted-foreground whitespace-nowrap">Sort by:</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="flex-1 sm:w-48 h-10 px-3 py-2 text-sm rounded-md border border-[#d4b896] bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-[#8b5a3c] focus:border-transparent"
+                >
+                  <option value="featured">Featured</option>
+                  <option value="price-low-high">Price: Low to High</option>
+                  <option value="price-high-low">Price: High to Low</option>
+                  <option value="rating-high-low">Rating: High to Low</option>
+                  <option value="rating-low-high">Rating: Low to High</option>
+                  <option value="name-a-z">Name: A to Z</option>
+                  <option value="name-z-a">Name: Z to A</option>
+                </select>
+              </div>
+              <Button
+                variant="outline"
+                className="lg:hidden bg-transparent border-[#d4b896]"
+                onClick={() => setMobileFiltersOpen(true)}
+              >
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                Filters
+              </Button>
+            </div>
           </div>
 
           <div className="flex gap-12">
