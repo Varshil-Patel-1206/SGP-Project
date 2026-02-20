@@ -48,9 +48,9 @@ const ITEMS_PER_PAGE = 9;
 export default function ShopPage() {
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState([0, 500]);
+  const [priceRange, setPriceRange] = useState([0, 999999]);
   const [tempMinPrice, setTempMinPrice] = useState(0);
-  const [tempMaxPrice, setTempMaxPrice] = useState(500);
+  const [tempMaxPrice, setTempMaxPrice] = useState(999999);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { addToCart } = useCart();
@@ -97,9 +97,9 @@ export default function ShopPage() {
   const clearFilters = () => {
     setSelectedSizes([]);
     setSelectedRegions([]);
-    setPriceRange([0, 500]);
+    setPriceRange([0, 999999]);
     setTempMinPrice(0);
-    setTempMaxPrice(500);
+    setTempMaxPrice(999999);
     setCurrentPage(1);
   };
 
@@ -152,47 +152,63 @@ export default function ShopPage() {
       </div>
 
       <div>
-        <h3 className="font-semibold text-foreground mb-4">Price Range</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-foreground">Price Range</h3>
+          {(tempMinPrice > 0 || tempMaxPrice < 999999) && (
+            <button
+              onClick={() => {
+                setTempMinPrice(0);
+                setTempMaxPrice(999999);
+              }}
+              className="text-xs text-[#8b5a3c] hover:text-[#6d4830] transition-colors"
+            >
+              Reset
+            </button>
+          )}
+        </div>
         <div className="space-y-3">
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Minimum Price</label>
+            <label className="text-xs text-muted-foreground mb-1 block">Minimum Price ($)</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
                 type="number"
                 min={0}
-                value={tempMinPrice}
+                value={tempMinPrice === 0 ? '' : tempMinPrice}
                 onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
+                  const value = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value));
                   setTempMinPrice(value);
                 }}
                 className="pl-7"
-                placeholder="0"
+                placeholder="Any"
               />
             </div>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Maximum Price</label>
+            <label className="text-xs text-muted-foreground mb-1 block">Maximum Price ($)</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
                 type="number"
                 min={0}
-                value={tempMaxPrice}
+                value={tempMaxPrice === 999999 ? '' : tempMaxPrice}
                 onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
+                  const value = e.target.value === '' ? 999999 : Math.max(0, Number(e.target.value));
                   setTempMaxPrice(value);
                 }}
                 className="pl-7"
-                placeholder="No limit"
+                placeholder="Any"
               />
             </div>
           </div>
+          <p className="text-xs text-muted-foreground italic">
+            Enter any price range to filter products
+          </p>
         </div>
       </div>
 
-      {(selectedSizes.length > 0 || selectedRegions.length > 0 || priceRange[0] > 0 || priceRange[1] < 500) && (
-        <Button variant="outline" onClick={clearFilters} className="w-full bg-transparent">
+      {(selectedSizes.length > 0 || selectedRegions.length > 0 || priceRange[0] > 0 || priceRange[1] < 999999) && (
+        <Button variant="outline" onClick={clearFilters} className="w-full bg-transparent border-[#d4b896] text-[#5a3726] hover:bg-[#f7f1e8]">
           Clear All Filters
         </Button>
       )}
