@@ -42,10 +42,13 @@ export default function CartPage() {
   const shippingCost = shippingMethod === "express" ? 25 : subtotal > 200 ? 0 : 15;
   const total = subtotal + shippingCost;
 
-  const handleUpdateQuantity = (id: number, delta: number) => {
-    const item = cartItems.find((i) => i.id === id);
+  const handleUpdateQuantity = (cartItemId: string, delta: number) => {
+    const item = cartItems.find((i) => {
+      const itemCartId = i.cartItemId || `${i.id}-${i.size}-${i.color}`;
+      return itemCartId === cartItemId;
+    });
     if (item) {
-      updateQuantity(id, item.quantity + delta);
+      updateQuantity(cartItemId, item.quantity + delta);
     }
   };
 
@@ -160,7 +163,10 @@ export default function CartPage() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  onClick={() => removeFromCart(item.id)}
+                                  onClick={() => {
+                                    const cartItemId = item.cartItemId || `${item.id}-${item.size}-${item.color}`;
+                                    removeFromCart(cartItemId);
+                                  }}
                                   className="text-muted-foreground hover:text-destructive"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -172,7 +178,10 @@ export default function CartPage() {
                                     variant="outline"
                                     size="icon"
                                     className="h-8 w-8 bg-transparent"
-                                    onClick={() => handleUpdateQuantity(item.id, -1)}
+                                    onClick={() => {
+                                      const cartItemId = item.cartItemId || `${item.id}-${item.size}-${item.color}`;
+                                      handleUpdateQuantity(cartItemId, -1);
+                                    }}
                                   >
                                     <Minus className="w-3 h-3" />
                                   </Button>
@@ -181,7 +190,10 @@ export default function CartPage() {
                                     variant="outline"
                                     size="icon"
                                     className="h-8 w-8 bg-transparent"
-                                    onClick={() => handleUpdateQuantity(item.id, 1)}
+                                    onClick={() => {
+                                      const cartItemId = item.cartItemId || `${item.id}-${item.size}-${item.color}`;
+                                      handleUpdateQuantity(cartItemId, 1);
+                                    }}
                                   >
                                     <Plus className="w-3 h-3" />
                                   </Button>

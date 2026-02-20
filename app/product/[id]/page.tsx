@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, Truck, Shield, Package, Minus, Plus, ChevronRight, Check } from "lucide-react";
+import { Star, Truck, Shield, Package, Minus, Plus, ChevronRight, Check, ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
 
 const products: Record<string, {
   id: number;
@@ -28,7 +29,7 @@ const products: Record<string, {
     price: 299,
     rating: 4.9,
     reviews: 128,
-    images: ["/images/product-1.jpg", "/images/world-map.jpg", "/images/hero-wooden-map.jpg", "/images/crafting.jpg"],
+    images: ["/World.jpeg", "/Home.jpeg", "/Custom.jpeg", "/Country.jpeg"],
     description: "Our Classic World Map is a stunning centerpiece that brings the beauty of our planet into your home. Each continent is meticulously laser-cut from premium birch plywood and assembled by hand, creating a dimensional work of art that captures light and shadow throughout the day.",
     features: ["Multi-layered 3D design", "Premium birch plywood", "Hand-finished with natural oils", "Easy wall mounting system", "Includes installation kit"],
   },
@@ -38,9 +39,109 @@ const products: Record<string, {
     price: 349,
     rating: 4.8,
     reviews: 89,
-    images: ["/images/product-2.jpg", "/images/country-map.jpg", "/images/hero-wooden-map.jpg", "/images/crafting.jpg"],
+    images: ["/Country.jpeg", "/World.jpeg", "/Custom.jpeg", "/Home.jpeg"],
     description: "Illuminate your space with our LED Europe Map. This stunning piece features integrated warm LED backlighting that creates an ambient glow, perfect for home offices or living spaces. Country borders are precisely defined, making it both decorative and educational.",
     features: ["Integrated LED lighting", "Remote control dimmer", "USB powered", "Country border details", "Includes power adapter"],
+  },
+  "3": {
+    id: 3,
+    name: "Minimalist Japan Map",
+    price: 199,
+    rating: 4.9,
+    reviews: 67,
+    images: ["/Custom.jpeg", "/World.jpeg", "/Country.jpeg", "/Home.jpeg"],
+    description: "Experience the elegance of Japanese minimalism with our Japan Map. Clean lines and precise detailing showcase the island nation's unique geography. Perfect for modern interiors and Japan enthusiasts.",
+    features: ["Minimalist design", "Detailed island contours", "Premium wood finish", "Lightweight construction", "Easy installation"],
+  },
+  "4": {
+    id: 4,
+    name: "USA States Map",
+    price: 279,
+    rating: 4.7,
+    reviews: 156,
+    images: ["/Home.jpeg", "/World.jpeg", "/Country.jpeg", "/Custom.jpeg"],
+    description: "Celebrate American geography with our detailed USA States Map. Each state is individually cut and labeled, making it perfect for educational purposes or as a patriotic home decor piece.",
+    features: ["All 50 states detailed", "State borders clearly defined", "Durable construction", "Educational and decorative", "Made in USA"],
+  },
+  "5": {
+    id: 5,
+    name: "World Map XL",
+    price: 449,
+    rating: 4.9,
+    reviews: 203,
+    images: ["/World.jpeg", "/Home.jpeg", "/Custom.jpeg", "/Country.jpeg"],
+    description: "Make a bold statement with our extra-large World Map. This impressive piece spans over 4 feet wide, featuring intricate continental details and ocean depth variations. Perfect for large walls and open spaces.",
+    features: ["Extra large size", "Detailed topography", "Premium materials", "Professional installation kit", "Lifetime warranty"],
+  },
+  "6": {
+    id: 6,
+    name: "NYC City Map",
+    price: 189,
+    rating: 4.8,
+    reviews: 94,
+    images: ["/BS1.jpeg", "/BS2.jpeg", "/BS3.jpeg", "/BS4.jpeg"],
+    description: "Capture the energy of New York City with our detailed street map. From Manhattan to Brooklyn, every borough is represented with precision. Perfect for NYC lovers and urban design enthusiasts.",
+    features: ["Detailed street layout", "All 5 boroughs", "Landmark locations", "Compact size", "Modern aesthetic"],
+  },
+  "7": {
+    id: 7,
+    name: "Paris Streets Map",
+    price: 189,
+    rating: 4.7,
+    reviews: 78,
+    images: ["/BS2.jpeg", "/BS1.jpeg", "/BS3.jpeg", "/BS4.jpeg"],
+    description: "Bring the romance of Paris into your home with our intricate street map. The Seine River winds through the city, with major landmarks and arrondissements beautifully detailed.",
+    features: ["Seine River detail", "Arrondissement divisions", "Landmark indicators", "French craftsmanship", "Elegant design"],
+  },
+  "8": {
+    id: 8,
+    name: "London City Map",
+    price: 199,
+    rating: 4.8,
+    reviews: 112,
+    images: ["/BS3.jpeg", "/BS1.jpeg", "/BS2.jpeg", "/BS4.jpeg"],
+    description: "Explore the historic streets of London with our detailed city map. The Thames River, iconic neighborhoods, and major landmarks are all represented in this sophisticated piece.",
+    features: ["Thames River detail", "Borough divisions", "Historic landmarks", "British craftsmanship", "Classic design"],
+  },
+  "9": {
+    id: 9,
+    name: "Australia Map",
+    price: 259,
+    rating: 4.6,
+    reviews: 45,
+    images: ["/BS4.jpeg", "/Country.jpeg", "/World.jpeg", "/Custom.jpeg"],
+    description: "Showcase the vast beauty of Australia with our continental map. From the Outback to the Great Barrier Reef, this map captures the unique geography of the land down under.",
+    features: ["Continental detail", "State boundaries", "Coastal features", "Australian timber", "Weather-resistant finish"],
+  },
+  "10": {
+    id: 10,
+    name: "Canada Map",
+    price: 269,
+    rating: 4.7,
+    reviews: 67,
+    images: ["/Country.jpeg", "/World.jpeg", "/Home.jpeg", "/Custom.jpeg"],
+    description: "Celebrate Canada's vast landscape with our detailed provincial map. From coast to coast, this piece showcases the true north strong and free with precision and pride.",
+    features: ["All provinces and territories", "Great Lakes detail", "Arctic archipelago", "Canadian maple wood", "Bilingual labels available"],
+  },
+  "11": {
+    id: 11,
+    name: "World Map LED",
+    price: 499,
+    rating: 4.9,
+    reviews: 178,
+    images: ["/World.jpeg", "/Home.jpeg", "/Custom.jpeg", "/Country.jpeg"],
+    description: "Our premium LED World Map combines artistry with technology. Warm LED backlighting creates a stunning ambiance while highlighting continental details. Remote-controlled brightness for any mood.",
+    features: ["Premium LED system", "Remote control", "Adjustable brightness", "Energy efficient", "Premium materials"],
+  },
+  "12": {
+    id: 12,
+    name: "Tokyo City Map",
+    price: 179,
+    rating: 4.8,
+    reviews: 89,
+    images: ["/Custom.jpeg", "/BS1.jpeg", "/BS2.jpeg", "/BS3.jpeg"],
+    description: "Experience the intricate urban planning of Tokyo with our detailed city map. From Shibuya to Shinjuku, this map captures the organized chaos of Japan's capital city.",
+    features: ["Ward divisions", "Major districts", "Railway lines", "Compact design", "Japanese aesthetic"],
   },
 };
 
@@ -50,7 +151,7 @@ const defaultProduct = {
   price: 299,
   rating: 4.9,
   reviews: 128,
-  images: ["/images/product-1.jpg", "/images/world-map.jpg", "/images/hero-wooden-map.jpg", "/images/crafting.jpg"],
+  images: ["/World.jpeg", "/Home.jpeg", "/Custom.jpeg", "/Country.jpeg"],
   description: "Our Classic World Map is a stunning centerpiece that brings the beauty of our planet into your home.",
   features: ["Multi-layered 3D design", "Premium birch plywood", "Hand-finished with natural oils", "Easy wall mounting system", "Includes installation kit"],
 };
@@ -76,16 +177,17 @@ const languageOptions = [
 ];
 
 const relatedProducts = [
-  { id: 3, name: "Minimalist Japan Map", price: 199, image: "/images/product-3.jpg" },
-  { id: 4, name: "USA States Map", price: 279, image: "/images/product-4.jpg" },
-  { id: 5, name: "World Map XL", price: 449, image: "/images/world-map.jpg" },
-  { id: 6, name: "NYC City Map", price: 189, image: "/images/city-map.jpg" },
+  { id: 3, name: "Minimalist Japan Map", price: 199, image: "/Custom.jpeg" },
+  { id: 4, name: "USA States Map", price: 279, image: "/Home.jpeg" },
+  { id: 5, name: "World Map XL", price: 449, image: "/World.jpeg" },
+  { id: 6, name: "NYC City Map", price: 189, image: "/BS1.jpeg" },
 ];
 
 export default function ProductPage() {
   const params = useParams();
   const productId = params.id as string;
   const product = products[productId] || defaultProduct;
+  const { addToCart } = useCart();
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("medium");
@@ -98,6 +200,19 @@ export default function ProductPage() {
   const totalPrice = product.price + sizePrice;
 
   const handleAddToCart = () => {
+    const selectedSizeOption = sizeOptions.find((s) => s.id === selectedSize);
+    const selectedColorOption = colorOptions.find((c) => c.id === selectedColor);
+    
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: totalPrice,
+      quantity: quantity,
+      image: product.images[0],
+      size: `${selectedSizeOption?.label} (${selectedSizeOption?.dimensions})`,
+      color: selectedColorOption?.label || "Natural Oak"
+    });
+    
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
@@ -241,7 +356,7 @@ export default function ProductPage() {
 
               <Button
                 size="lg"
-                className="w-full py-6 text-base"
+                className="w-full py-6 text-base bg-[#8b5a3c] hover:bg-[#6d4830]"
                 onClick={handleAddToCart}
                 disabled={addedToCart}
               >
@@ -251,7 +366,10 @@ export default function ProductPage() {
                     Added to Cart
                   </>
                 ) : (
-                  `Add to Cart - $${totalPrice * quantity}`
+                  <>
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Add to Cart - ${totalPrice * quantity}
+                  </>
                 )}
               </Button>
 
