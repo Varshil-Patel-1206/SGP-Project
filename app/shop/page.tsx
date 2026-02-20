@@ -60,7 +60,7 @@ export default function ShopPage() {
     const timer = setTimeout(() => {
       setPriceRange([tempMinPrice, tempMaxPrice]);
       setCurrentPage(1);
-    }, 500); // Wait 500ms after user stops typing
+    }, 800); // Wait 800ms after user stops typing
 
     return () => clearTimeout(timer);
   }, [tempMinPrice, tempMaxPrice]);
@@ -174,13 +174,16 @@ export default function ShopPage() {
               <Input
                 type="number"
                 min={0}
-                value={tempMinPrice === 0 ? '' : tempMinPrice}
+                value={tempMinPrice}
                 onChange={(e) => {
-                  const value = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value));
-                  setTempMinPrice(value);
+                  const value = e.target.value === '' ? 0 : Number(e.target.value);
+                  if (value >= 0) {
+                    setTempMinPrice(value);
+                  }
                 }}
+                onFocus={(e) => e.target.select()}
                 className="pl-7"
-                placeholder="Any"
+                placeholder="0"
               />
             </div>
           </div>
@@ -191,13 +194,16 @@ export default function ShopPage() {
               <Input
                 type="number"
                 min={0}
-                value={tempMaxPrice === 999999 ? '' : tempMaxPrice}
+                value={tempMaxPrice}
                 onChange={(e) => {
-                  const value = e.target.value === '' ? 999999 : Math.max(0, Number(e.target.value));
-                  setTempMaxPrice(value);
+                  const value = e.target.value === '' ? 0 : Number(e.target.value);
+                  if (value >= 0) {
+                    setTempMaxPrice(value);
+                  }
                 }}
+                onFocus={(e) => e.target.select()}
                 className="pl-7"
-                placeholder="Any"
+                placeholder="999999"
               />
             </div>
           </div>
