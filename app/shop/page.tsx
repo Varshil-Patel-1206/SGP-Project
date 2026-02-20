@@ -8,7 +8,8 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Star, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, SlidersHorizontal, X, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
 
 // TODO: Replace with real product images from database
 // TODO: Add proper product descriptions
@@ -52,6 +53,7 @@ export default function ShopPage() {
   const [tempMaxPrice, setTempMaxPrice] = useState(500);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const { addToCart } = useCart();
 
   // Debounce price range updates
   useEffect(() => {
@@ -99,6 +101,22 @@ export default function ShopPage() {
     setTempMinPrice(0);
     setTempMaxPrice(500);
     setCurrentPage(1);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent, product: typeof allProducts[0]) => {
+    e.preventDefault(); // Prevent navigation to product page
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+      size: product.size === "small" ? "Small (30x20 cm)" : 
+            product.size === "medium" ? "Medium (60x40 cm)" : 
+            product.size === "large" ? "Large (90x60 cm)" : 
+            "Extra Large (120x80 cm)",
+      color: "Natural Oak"
+    });
   };
 
   const FiltersContent = () => (
@@ -223,37 +241,46 @@ export default function ShopPage() {
             <div className="flex-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-300">
                 {paginatedProducts.map((product) => (
-                  <Link 
+                  <div 
                     key={product.id} 
-                    href={`/product/${product.id}`} 
                     className="group animate-in fade-in duration-300"
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-lg bg-muted mb-4">
-                      <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      {product.badge && (
-                        <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-3 py-1 rounded-full">
-                          {product.badge}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1 mb-2">
-                      <Star className="w-4 h-4 fill-accent text-accent" />
-                      <span className="text-sm font-medium text-foreground">{product.rating}</span>
-                      <span className="text-sm text-muted-foreground">({product.reviews})</span>
-                    </div>
-                    <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-lg font-semibold text-foreground mt-1">${product.price}</p>
+                    <Link href={`/product/${product.id}`}>
+                      <div className="relative aspect-square overflow-hidden rounded-lg bg-muted mb-4">
+                        <Image
+                          src={product.image || "/placeholder.svg"}
+                          alt={product.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {product.badge && (
+                          <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-3 py-1 rounded-full">
+                            {product.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 mb-2">
+                        <Star className="w-4 h-4 fill-accent text-accent" />
+                        <span className="text-sm font-medium text-foreground">{product.rating}</span>
+                        <span className="text-sm text-muted-foreground">({product.reviews})</span>
+                      </div>
+                      <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="text-lg font-semibold text-foreground mt-1">${product.price}</p>
+                    </Link>
+                    <Button 
+                      className="w-full mt-3 bg-[#8b5a3c] hover:bg-[#6d4830] text-white"
+                      onClick={(e) => handleAddToCart(e, product)}
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add to Cart
+                    </Button>
+                  </div>
                     <Button variant="outline" className="w-full mt-3 bg-transparent" size="sm">
                       View Details
                     </Button>
-                  </Link>
+                  </div>
                 ))}
               </div>
 

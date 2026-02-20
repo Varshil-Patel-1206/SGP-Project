@@ -9,7 +9,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
-import { Globe, MapPin, Building, Lightbulb, Check } from "lucide-react";
+import { Globe, MapPin, Building, Lightbulb, Check, ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
 
 const mapTypes = [
   {
@@ -70,9 +71,11 @@ export default function CustomizePage() {
   const [language, setLanguage] = useState("en");
   const [hasLED, setHasLED] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const { addToCart } = useCart();
 
   const selectedMapType = mapTypes.find((m) => m.id === mapType)!;
   const selectedSize = sizeOptions.find((s) => s.id === size)!;
+  const selectedWoodColor = woodColors.find((w) => w.id === woodColor)!;
 
   const totalPrice = useMemo(() => {
     const base = selectedMapType.basePrice * selectedSize.multiplier;
@@ -81,6 +84,15 @@ export default function CustomizePage() {
   }, [selectedMapType, selectedSize, hasLED]);
 
   const handleAddToCart = () => {
+    addToCart({
+      id: Date.now(), // Generate unique ID for custom map
+      name: `Custom ${selectedMapType.label}`,
+      price: totalPrice,
+      quantity: 1,
+      image: selectedMapType.image,
+      size: `${selectedSize.label} (${selectedSize.dimensions})`,
+      color: selectedWoodColor.label
+    });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
@@ -287,7 +299,7 @@ export default function CustomizePage() {
 
                     <Button
                       size="lg"
-                      className="w-full mt-6 py-6 text-base"
+                      className="w-full mt-6 py-6 text-base bg-[#8b5a3c] hover:bg-[#6d4830]"
                       onClick={handleAddToCart}
                       disabled={addedToCart}
                     >
@@ -297,7 +309,10 @@ export default function CustomizePage() {
                           Added to Cart
                         </>
                       ) : (
-                        `Add Custom Map to Cart`
+                        <>
+                          <ShoppingCart className="w-5 h-5 mr-2" />
+                          Add Custom Map to Cart
+                        </>
                       )}
                     </Button>
 
